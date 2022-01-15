@@ -61,20 +61,16 @@ function PriceDisplay({ stock }: { stock: Stock }) {
       .filter((k) => k > "2016")
       .map((k) => new Date(k).getTime() / 1000)
       .reverse(),
-    Object.values(stock.prices)
-      .map((v) => Number(v["5. adjusted close"]))
+    Object.entries(stock.prices)
+      .filter(([k, v]) => k > "2016")
+      .map(([k, v]) => Number(v["5. adjusted close"]))
+      // .map((v) => Number(v["4. close"]))
       .reverse(),
   ];
   console.log(data);
 
   return (
     <div>
-      {/* {Object.entries(stock.prices).map(([k, v]) => (
-        <div>
-          {k}: {v["4. close"]}
-        </div>
-        
-      ))} */}
       <div style={{ fontSize: "24px", margin: "24px" }}>
         {stock.symbol.toUpperCase()}
       </div>
