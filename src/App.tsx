@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { fetchData, Stock } from "./api/main";
+import humanFormat from "human-format";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -52,16 +53,50 @@ function StockDisplay({ stock }: { stock: Stock }) {
               display: "flex",
               flexDirection: "column",
               minWidth: "160px",
+              // border: "1px solid black",
+              // borderCollapse: "initial",
+              paddingRight: "24px",
             }}
           >
-            {Object.values(year).map((val) => (
-              <div style={{ textAlign: "left" }}>{JSON.stringify(val)}</div>
-            ))}
+            {Object.values(year).map((val) => {
+              const [pretty, pos] = prettifyVal(val);
+              return (
+                <div
+                  style={{
+                    textAlign: "right",
+                    color:
+                      pos == Positive.TRUE
+                        ? "green"
+                        : pos == Positive.NONE
+                        ? "black"
+                        : "red",
+                  }}
+                >
+                  {pretty}
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>
     </>
   );
+}
+
+enum Positive {
+  TRUE,
+  FALSE,
+  NONE,
+}
+
+function prettifyVal(val: string): [string, Positive] {
+  try {
+    const n = Number(val);
+    const pos = n == 0 ? Positive.NONE : n > 0 ? Positive.TRUE : Positive.FALSE;
+    return [humanFormat(n).replace("G", "B"), pos]; // billion
+  } catch (e) {
+    return [val, Positive.NONE];
+  }
 }
 
 export default App;
