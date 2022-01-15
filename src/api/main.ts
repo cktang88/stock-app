@@ -1,7 +1,8 @@
 import alphavantage from "alphavantage";
-import { getBalanceSheet } from "./balanceSheet";
+import { getIncomeStatement } from "./income";
 import localforage from "localforage";
 import { getWeeklyAdjustedPrices } from "./prices";
+import { getCashFlow } from "./cashflow";
 
 export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
@@ -9,23 +10,28 @@ export const alpha = alphavantage({
 
 export type Stock = {
   symbol: string;
-  balanceSheetAnnual: Object[];
-  balanceSheetQuarterly: Object[];
+  incomeAnnual: Object[];
+  incomeQuarterly: Object[];
   prices: Object;
+  cashflowAnnual: Object[];
+  cashflowQuarterly: Object[];
 };
 
 export const fetchData: () => Promise<Stock[]> = () => {
   const stocks = ["ibm", "snow", "aapl"];
   let res = Promise.all(
     stocks.map(async (symbol) => {
-      let bal = await getBalanceSheet(symbol);
+      let bal = await getIncomeStatement(symbol);
       let raw_prices = await getWeeklyAdjustedPrices(symbol);
+      let raw_cash = await getCashFlow(symbol);
       let prices = raw_prices["Weekly Adjusted Time Series"];
       return {
         symbol,
-        balanceSheetAnnual: bal["annualReports"],
-        balanceSheetQuarterly: bal["quarterlyReports"],
+        incomeAnnual: bal["annualReports"],
+        incomeQuarterly: bal["quarterlyReports"],
         prices,
+        cashflowAnnual: raw_cash["annualReports"],
+        cashflowQuarterly: raw_cash["quarterlyReports"],
       };
     })
   );
