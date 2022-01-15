@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { fetchData, Stock } from "./api/main";
+import Chart from "./chart";
 // import humanFormat from "human-format";
+
+enum Tabs {
+  BALANCE,
+  PRICES,
+}
 
 function App() {
   const [count, setCount] = useState(0);
   const [data, setData] = useState<Stock[]>([]);
+  const [tab, setTab] = useState(Tabs.PRICES);
 
   useEffect(() => {
     const fetcher = async () => {
@@ -17,16 +24,66 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        {data?.map((d) => (
-          <StockDisplay key={d.id} stock={d} />
-        ))}
-      </div>
+      <button onClick={() => setTab(Tabs.PRICES)}>Prices</button>
+      <button onClick={() => setTab(Tabs.BALANCE)}>Balances</button>
+      {tab == Tabs.BALANCE && (
+        <div>
+          {data?.map((d) => (
+            <BalanceDisplay key={d.id} stock={d} />
+          ))}
+        </div>
+      )}
+      {tab == Tabs.PRICES && (
+        <div>
+          {data?.map((d) => (
+            <PriceDisplay key={d.id} stock={d} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function StockDisplay({ stock }: { stock: Stock }) {
+function PriceDisplay({ stock }: { stock: Stock }) {
+  const opts = {
+    title: "Prices",
+    width: 800,
+    height: 600,
+    series: [
+      {},
+      {
+        stroke: "blue",
+      },
+    ],
+  };
+  const data = [
+    Object.keys(stock.prices)
+      .filter((k) => k > "2016")
+      .map((k) => new Date(k).getTime() / 1000)
+      .reverse(),
+    Object.values(stock.prices)
+      .map((v) => Number(v["5. adjusted close"]))
+      .reverse(),
+  ];
+  console.log(data);
+
+  return (
+    <div>
+      {/* {Object.entries(stock.prices).map(([k, v]) => (
+        <div>
+          {k}: {v["4. close"]}
+        </div>
+        
+      ))} */}
+      <div style={{ fontSize: "24px", margin: "24px" }}>
+        {stock.symbol.toUpperCase()}
+      </div>
+      <Chart options={opts} data={data} />
+    </div>
+  );
+}
+
+function BalanceDisplay({ stock }: { stock: Stock }) {
   return (
     <>
       <div style={{ fontSize: "24px", margin: "24px" }}>
