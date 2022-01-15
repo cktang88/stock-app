@@ -244,6 +244,11 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@types/node@^17.0.8":
+  version "17.0.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.8.tgz#50d680c8a8a78fe30abe6906453b21ad8ab0ad7b"
+  integrity sha512-YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg==
+
 "@types/prop-types@*":
   version "15.7.4"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
@@ -283,6 +288,13 @@
     "@rollup/pluginutils" "^4.1.2"
     react-refresh "^0.11.0"
     resolve "^1.20.0"
+
+alphavantage@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/alphavantage/-/alphavantage-2.3.0.tgz#134255dc6336f68e7ab1fd4246c8b32c4744a5a3"
+  integrity sha512-zQyjgkanxWq9v4Gsbnb+LFrvgkdmF9w5ShMbIViz4T/i4SQrgr0ws/snTf7SOygUu2Bf28ZHI+sUJ0vlqUfYPQ==
+  dependencies:
+    cross-fetch "^3.0.6"
 
 ansi-styles@^3.2.1:
   version "3.2.1"
@@ -334,6 +346,13 @@ convert-source-map@^1.7.0:
   integrity sha512-+OQdjP49zViI/6i7nIJpA8rAl4sV/JdPfU9nZs3VqOwGIgizICvuN2ru6fMd+4llL0tar18UYJXfZ/TWtmhUjA==
   dependencies:
     safe-buffer "~5.1.1"
+
+cross-fetch@^3.0.6:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
+  integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
+  dependencies:
+    node-fetch "2.6.1"
 
 csstype@^3.0.2:
   version "3.0.10"
@@ -552,6 +571,11 @@ nanoid@^3.1.30:
   version "3.1.32"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.32.tgz#8f96069e6239cc0a9ae8c0d3b41a3b4933a88c0a"
   integrity sha512-F8mf7R3iT9bvThBoW4tGXhXFHCctyCiUUPrWF8WaTqa3h96d9QybkSeba43XVOOE3oiLfkVDe4bT8MeGmkrTxw==
+
+node-fetch@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
 node-releases@^2.0.1:
   version "2.0.1"
