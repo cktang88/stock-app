@@ -1,49 +1,66 @@
 import { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { run } from "./api/main";
+import { fetchData, Stock } from "./api/main";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [data, setData] = useState<Stock[]>([]);
 
   useEffect(() => {
-    run();
+    const fetcher = async () => {
+      let res = await fetchData();
+      setData(res);
+    };
+    fetcher();
   }, []);
 
   return (
     <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <div>
+        {data?.map((d) => (
+          <StockDisplay key={d.id} stock={d} />
+        ))}
+      </div>
     </div>
+  );
+}
+
+function StockDisplay({ stock }: { stock: Stock }) {
+  return (
+    <>
+      <div style={{ fontSize: "24px", margin: "24px" }}>
+        {stock.symbol.toUpperCase()}
+      </div>
+      <div style={{ display: "flex", flexDirection: "row", margin: "24px" }}>
+        {/* {stock?.balanceSheetAnnual.map((year) => (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {Object.entries(year).map(([k, v]) => (
+              <div>
+                {k}: {JSON.stringify(v)}
+              </div>
+            ))}
+          </div>
+        ))} */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {Object.keys(stock?.balanceSheetQuarterly[0]).map((key) => (
+            <div style={{ textAlign: "left" }}>{key}</div>
+          ))}
+        </div>
+        {stock?.balanceSheetQuarterly.map((year) => (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              minWidth: "160px",
+            }}
+          >
+            {Object.values(year).map((val) => (
+              <div style={{ textAlign: "left" }}>{JSON.stringify(val)}</div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
