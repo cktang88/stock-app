@@ -5,6 +5,7 @@ import { getMonthlyAdjustedPrices } from "./prices";
 import { getCashFlow } from "./cashflow";
 import { getOverview } from "./overview";
 import { getPriceAtDay } from "./priceAtTime";
+import { Stock, StockTxnResult } from "./types";
 
 export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
@@ -35,19 +36,6 @@ const SYMBOLS = [
   "fb",
 ];
 
-type StringObj = {
-  [key: string]: string;
-};
-export type Stock = {
-  symbol: string;
-  incomeAnnual: StringObj[];
-  incomeQuarterly: StringObj[];
-  prices: StringObj;
-  cashflowAnnual: StringObj[];
-  cashflowQuarterly: StringObj[];
-  overview: StringObj;
-};
-
 export const fetchData: () => Promise<Stock[]> = async () => {
   let res = Promise.all(
     SYMBOLS.map(async (symbol) => {
@@ -67,11 +55,38 @@ export const fetchData: () => Promise<Stock[]> = async () => {
       };
     })
   );
-  console.log(res);
+  // console.log(res);
   console.log("CACHE MEM USAGE: ", await navigator.storage.estimate());
-  let test = await getPriceAtDay(SYMBOLS[0], "20210711");
-  console.log(test);
+
   return res;
+};
+
+export const buy = async (
+  symbol: string,
+  spend: number,
+  date: Date
+): Promise<StockTxnResult> => {
+  // NOTE: months are 0-indexed
+  const price: number = (await getPriceAtDay(symbol, date))["fclose"];
+  const numShares = Math.floor(spend / price);
+  return {
+    numSharesDelta: numShares,
+    moneyDelta: numShares * price,
+  };
+};
+
+export const sell = async (
+  symbol: string,
+  dollarValue: number,
+  date: Date
+): Promise<StockTxnResult> => {
+  // NOTE: months are 0-indexed
+  const price: number = (await getPriceAtDay(symbol, date))["fclose"];
+  const numShares = Math.floor(dollarValue / price);
+  return {
+    numSharesDelta: numShares,
+    moneyDelta: numShares * price,
+  };
 };
 
 export const getCacheOrRefetch = async (key: string, refetchFn: () => any) => {
@@ -90,3 +105,5 @@ export const getCacheOrRefetch = async (key: string, refetchFn: () => any) => {
   }
   return freshData;
 };
+
+export * from "./types";

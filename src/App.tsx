@@ -15,6 +15,7 @@ enum Tabs {
   PRICES,
   CASHFLOW,
   OVERVIEW,
+  PORTFOLIO,
 }
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
       <button onClick={() => setTab(Tabs.OVERVIEW)}>Overview</button>
       <button onClick={() => setTab(Tabs.INCOME)}>Income</button>
       <button onClick={() => setTab(Tabs.CASHFLOW)}>CashFlow</button>
+      <button onClick={() => setTab(Tabs.PORTFOLIO)}>Portfolio</button>
       {tab == Tabs.INCOME && (
         <div>
           {data?.map((d) => (
@@ -77,6 +79,11 @@ function App() {
           {data?.map((d) => (
             <CashflowDisplay key={`${d.symbol}-cashflow`} stock={d} />
           ))}
+        </div>
+      )}
+      {tab == Tabs.PORTFOLIO && (
+        <div>
+          <PortfolioDisplay />
         </div>
       )}
     </div>
