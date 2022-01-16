@@ -18,8 +18,10 @@ const SYMBOLS = [
   "mdb", //mongo
   "ddog",
   "net", //cloudflare
-  "amex",
-  "visa",
+  "axp", //amex
+  "v", //visa
+  "pypl", //paypal
+  "coin", //coinbase
 ];
 
 export type Stock = {
@@ -62,8 +64,13 @@ export const getCacheOrRefetch = async (key: string, refetchFn: () => any) => {
     console.log("got cached data: ", key);
     return cachedData;
   }
-  let freshData = await refetchFn();
-  await localforage.setItem(key, freshData);
-  console.log("returning FRESH data: ", key);
+  let freshData = {};
+  try {
+    freshData = await refetchFn();
+    await localforage.setItem(key, freshData);
+    console.log("returning FRESH data: ", key);
+  } catch (e) {
+    console.log(e);
+  }
   return freshData;
 };

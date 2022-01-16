@@ -14,6 +14,9 @@ export function PriceDisplay({ stock }: { stock: Stock }) {
       },
     ],
   };
+  if (!stock.prices) {
+    return <></>;
+  }
   const data = useMemo(() => {
     return [
       Object.keys(stock.prices)
@@ -27,7 +30,6 @@ export function PriceDisplay({ stock }: { stock: Stock }) {
         .reverse(),
     ];
   }, [stock]);
-  console.log(data);
 
   return (
     <div>

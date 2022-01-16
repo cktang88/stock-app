@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_ALPHAVANTAGE_KEY: string;
+  readonly VITE_ALPHAVANTAGE_KEY2: string;
   // more env variables...
 }
 
