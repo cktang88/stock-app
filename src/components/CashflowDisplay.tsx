@@ -1,4 +1,4 @@
-import { Stock } from "../api/main";
+import { Stock } from "../api";
 import { prettifyVal, Positive } from "./utils";
 
 export function CashflowDisplay({ stock }: { stock: Stock }) {

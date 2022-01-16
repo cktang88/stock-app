@@ -1,4 +1,4 @@
-import { alpha, getCacheOrRefetch } from "./main";
+import { alpha, getCacheOrRefetch } from ".";
 
 export const getIncomeStatement = async (symbol: string) => {
   const key = "INCOME_STATEMENT" + symbol.toUpperCase();

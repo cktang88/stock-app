@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { Stock } from "../api/main";
-import Chart from "../chart";
+import { Stock } from "../api";
+import Chart from "./chart";
 
 export function PriceDisplay({ stock }: { stock: Stock }) {
   const opts = {

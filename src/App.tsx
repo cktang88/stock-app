@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { fetchData, Stock } from "./api/main";
+import { fetchData, Stock } from "./api";
 import { BalanceDisplay } from "./components/BalanceDisplay";
 import { CashflowDisplay } from "./components/CashflowDisplay";
 import { PriceDisplay } from "./components/PriceDisplay";
+import { OverviewDisplay } from "./components/OverviewDisplay";
 
 enum Tabs {
   INCOME,
@@ -12,7 +13,6 @@ enum Tabs {
 }
 
 function App() {
-  const [count, setCount] = useState(0);
   const [fullData, setData] = useState<Stock[]>([]);
   const [tab, setTab] = useState(Tabs.PRICES);
   const [search, setSearch] = useState("");
@@ -26,7 +26,12 @@ function App() {
   }, []);
 
   const data = useMemo(() => {
-    return fullData.filter((e) => e.symbol.includes(search));
+    const term = search.toLowerCase();
+    return fullData.filter(
+      (e) =>
+        e.symbol.toLocaleLowerCase().includes(term) ||
+        e.overview["Name"].toLowerCase().includes(term)
+    );
   }, [fullData, search]);
 
   return (
@@ -48,7 +53,12 @@ function App() {
       {tab == Tabs.PRICES && (
         <div>
           {data?.map((d) => (
-            <PriceDisplay key={d.id} stock={d} />
+            <div style={{ display: "flex" }}>
+              <PriceDisplay key={d.id} stock={d} />
+              <div style={{ margin: "24px" }}>
+                <OverviewDisplay key={d.id} stock={d} />
+              </div>
+            </div>
           ))}
         </div>
       )}

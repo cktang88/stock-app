@@ -1,8 +1,9 @@
 import alphavantage from "alphavantage";
 import { getIncomeStatement } from "./income";
 import localforage from "localforage";
-import { getWeeklyAdjustedPrices } from "./prices";
+import { getMonthlyAdjustedPrices } from "./prices";
 import { getCashFlow } from "./cashflow";
+import { getOverview } from "./overview";
 
 export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
@@ -24,15 +25,17 @@ export type Stock = {
   prices: Object;
   cashflowAnnual: Object[];
   cashflowQuarterly: Object[];
+  overview: Object;
 };
 
-export const fetchData: () => Promise<Stock[]> = () => {
+export const fetchData: () => Promise<Stock[]> = async () => {
   let res = Promise.all(
     SYMBOLS.map(async (symbol) => {
       let bal = await getIncomeStatement(symbol);
-      let raw_prices = await getWeeklyAdjustedPrices(symbol);
+      let raw_prices = await getMonthlyAdjustedPrices(symbol);
       let raw_cash = await getCashFlow(symbol);
-      let prices = raw_prices["Weekly Adjusted Time Series"];
+      let overview = await getOverview(symbol);
+      let prices = raw_prices["Monthly Adjusted Time Series"];
       return {
         symbol,
         incomeAnnual: bal["annualReports"],
@@ -40,10 +43,12 @@ export const fetchData: () => Promise<Stock[]> = () => {
         prices,
         cashflowAnnual: raw_cash["annualReports"],
         cashflowQuarterly: raw_cash["quarterlyReports"],
+        overview,
       };
     })
   );
   console.log(res);
+  console.log("CACHE MEM USAGE: ", await navigator.storage.estimate());
   return res;
 };
 
