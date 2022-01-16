@@ -6,6 +6,10 @@
   - the free API key's rate limit is 5/min and 500/day
 - in the future use [IEX Cloud](https://iexcloud.io/)?
 
+## usage
+
+- create a `.env.local` containing:
+
 #### notes
 
 - Vite env vars are weird: https://vitejs.dev/guide/env-and-mode.html#env-files

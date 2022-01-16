@@ -4,6 +4,7 @@ import localforage from "localforage";
 import { getMonthlyAdjustedPrices } from "./prices";
 import { getCashFlow } from "./cashflow";
 import { getOverview } from "./overview";
+import { getPriceAtDay } from "./priceAtTime";
 
 export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
@@ -34,14 +35,17 @@ const SYMBOLS = [
   "fb",
 ];
 
+type StringObj = {
+  [key: string]: string;
+};
 export type Stock = {
   symbol: string;
-  incomeAnnual: Object[];
-  incomeQuarterly: Object[];
-  prices: Object;
-  cashflowAnnual: Object[];
-  cashflowQuarterly: Object[];
-  overview: Object;
+  incomeAnnual: StringObj[];
+  incomeQuarterly: StringObj[];
+  prices: StringObj;
+  cashflowAnnual: StringObj[];
+  cashflowQuarterly: StringObj[];
+  overview: StringObj;
 };
 
 export const fetchData: () => Promise<Stock[]> = async () => {
@@ -65,13 +69,15 @@ export const fetchData: () => Promise<Stock[]> = async () => {
   );
   console.log(res);
   console.log("CACHE MEM USAGE: ", await navigator.storage.estimate());
+  let test = await getPriceAtDay(SYMBOLS[0], "20210711");
+  console.log(test);
   return res;
 };
 
 export const getCacheOrRefetch = async (key: string, refetchFn: () => any) => {
   const cachedData = await localforage.getItem(key);
   if (cachedData) {
-    console.log("got cached data: ", key);
+    // console.log("got cached data: ", key);
     return cachedData;
   }
   let freshData = {};
