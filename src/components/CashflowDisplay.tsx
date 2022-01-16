@@ -2,6 +2,9 @@ import { Stock } from "../api";
 import { prettifyVal, Positive } from "./utils";
 
 export function CashflowDisplay({ stock }: { stock: Stock }) {
+  if (!stock?.cashflowQuarterly) {
+    return <></>;
+  }
   return (
     <>
       <div style={{ fontSize: "24px", margin: "24px" }}>

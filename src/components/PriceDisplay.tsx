@@ -4,9 +4,9 @@ import Chart from "./chart";
 
 export function PriceDisplay({ stock }: { stock: Stock }) {
   const opts = {
-    title: "Prices",
-    width: 800,
-    height: 600,
+    title: stock.symbol.toUpperCase(),
+    width: 600,
+    height: 400,
     series: [
       {},
       {
@@ -32,10 +32,10 @@ export function PriceDisplay({ stock }: { stock: Stock }) {
   }, [stock]);
 
   return (
-    <div>
-      <div style={{ fontSize: "24px", margin: "24px" }}>
+    <div style={{ paddingTop: "24px" }}>
+      {/* <div style={{ fontSize: "24px", margin: "24px" }}>
         {stock.symbol.toUpperCase()}
-      </div>
+      </div> */}
       <Chart options={opts} data={data} />
     </div>
   );

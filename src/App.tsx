@@ -10,6 +10,7 @@ enum Tabs {
   INCOME,
   PRICES,
   CASHFLOW,
+  OVERVIEW,
 }
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
       </span>
 
       <button onClick={() => setTab(Tabs.PRICES)}>Prices</button>
+      <button onClick={() => setTab(Tabs.OVERVIEW)}>Overview</button>
       <button onClick={() => setTab(Tabs.INCOME)}>Income</button>
       <button onClick={() => setTab(Tabs.CASHFLOW)}>CashFlow</button>
       {tab == Tabs.INCOME && (
@@ -51,13 +53,31 @@ function App() {
         </div>
       )}
       {tab == Tabs.PRICES && (
-        <div>
+        <div
+          style={{
+            margin: "24px",
+            display: "flex",
+            maxWidth: "100vw",
+            flexWrap: "wrap",
+          }}
+        >
           {data?.map((d) => (
-            <div style={{ display: "flex" }}>
-              <PriceDisplay key={d.id} stock={d} />
-              <div style={{ margin: "24px" }}>
-                <OverviewDisplay key={d.id} stock={d} />
-              </div>
+            <PriceDisplay key={d.id} stock={d} />
+          ))}
+        </div>
+      )}
+      {tab == Tabs.OVERVIEW && (
+        <div
+          style={{
+            marginLeft: "60px",
+            display: "flex",
+            maxWidth: "100vw",
+            flexWrap: "wrap",
+          }}
+        >
+          {data?.map((d) => (
+            <div style={{ margin: "24px" }}>
+              <OverviewDisplay key={d.id} stock={d} />
             </div>
           ))}
         </div>

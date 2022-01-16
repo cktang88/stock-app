@@ -6,7 +6,7 @@ import { getCashFlow } from "./cashflow";
 import { getOverview } from "./overview";
 
 export const alpha = alphavantage({
-  key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
+  key: import.meta.env.VITE_ALPHAVANTAGE_KEY2,
 });
 
 const SYMBOLS = [
@@ -29,6 +29,9 @@ const SYMBOLS = [
   "bill", //bill.com
   "u", //unity
   "rblx", //roblox
+  "msft",
+  "googl",
+  "fb",
 ];
 
 export type Stock = {
