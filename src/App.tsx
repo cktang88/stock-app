@@ -1,10 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { fetchData, Stock } from "./api";
 import { BalanceDisplay } from "./components/BalanceDisplay";
 import { CashflowDisplay } from "./components/CashflowDisplay";
 import { PriceDisplay } from "./components/PriceDisplay";
-import { OverviewDisplay } from "./components/OverviewDisplay";
+import {
+  cleanKeys,
+  COL_WIDTH,
+  OverviewDisplay,
+} from "./components/OverviewDisplay";
 
 enum Tabs {
   INCOME,
@@ -15,7 +19,7 @@ enum Tabs {
 
 function App() {
   const [fullData, setData] = useState<Stock[]>([]);
-  const [tab, setTab] = useState(Tabs.PRICES);
+  const [tab, setTab] = useState(Tabs.OVERVIEW);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -67,22 +71,7 @@ function App() {
           ))}
         </div>
       )}
-      {tab == Tabs.OVERVIEW && (
-        <div
-          style={{
-            marginLeft: "60px",
-            display: "flex",
-            maxWidth: "100vw",
-            flexWrap: "wrap",
-          }}
-        >
-          {data?.map((d) => (
-            <div style={{ margin: "24px" }}>
-              <OverviewDisplay key={`${d.symbol}-overview`} stock={d} />
-            </div>
-          ))}
-        </div>
-      )}
+      {tab == Tabs.OVERVIEW && <OverviewPage data={data} />}
       {tab == Tabs.CASHFLOW && (
         <div>
           {data?.map((d) => (
@@ -93,6 +82,45 @@ function App() {
     </div>
   );
 }
+
+const OverviewPage: FC<{ data: Stock[] }> = ({ data }) => {
+  if (!data[0]) {
+    return <div>No results found.</div>;
+  }
+  return (
+    <div
+      style={{
+        paddingTop: "24px",
+        paddingRight: "24px",
+        display: "flex",
+        flexDirection: "column",
+        // maxWidth: "100vw",
+        // flexWrap: "wrap",
+      }}
+    >
+      <div
+        style={{ display: "flex", flexDirection: "row", paddingBottom: "24px" }}
+      >
+        {Object.keys(cleanKeys(data[0]?.overview)).map((key, i) => (
+          <div
+            style={{
+              textAlign: "right",
+              minWidth: COL_WIDTH,
+              // color: i % 2 == 0 ? "#000" : "#777",
+              height: "2em",
+            }}
+            key={`legend-overview-${i}`}
+          >
+            <button>{key}</button>
+          </div>
+        ))}
+      </div>
+      {data?.map((d) => (
+        <OverviewDisplay key={`${d.symbol}-overview`} stock={d} />
+      ))}
+    </div>
+  );
+};
 
 const SearchBar = ({ setSearch }) => {
   return (

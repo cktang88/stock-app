@@ -4,11 +4,17 @@ export enum Positive {
   NONE,
 }
 
-export function prettifyVal(val: string): [string, Positive] {
+export function prettifyVal(
+  val: string,
+  onlyFormatLarge: boolean = true
+): [string, Positive] {
   try {
     let n = Number(val);
     if (Number.isNaN(n)) {
       throw Error("Not a number");
+    }
+    if (onlyFormatLarge && Math.abs(n) < 1_000_000) {
+      throw Error("Too small to format");
     }
     const pos = n == 0 ? Positive.NONE : n > 0 ? Positive.TRUE : Positive.FALSE;
     n = Math.round(n / 1_000_000);
