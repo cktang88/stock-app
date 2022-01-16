@@ -22,6 +22,13 @@ const SYMBOLS = [
   "v", //visa
   "pypl", //paypal
   "coin", //coinbase
+  "crwd", //crowdstrike
+  "zm", //zoom
+  "now", //servicenow
+  "okta",
+  "bill", //bill.com
+  "u", //unity
+  "rblx", //roblox
 ];
 
 export type Stock = {

@@ -30,7 +30,7 @@ function App() {
     return fullData.filter(
       (e) =>
         e.symbol.toLocaleLowerCase().includes(term) ||
-        (e.overview && e.overview["Name"].toLowerCase().includes(term))
+        (e.overview?.Name && e.overview.Name.toLowerCase().includes(term))
     );
   }, [fullData, search]);
 
