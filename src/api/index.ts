@@ -16,6 +16,10 @@ const SYMBOLS = [
   "crm", // salesforce
   "afrm", // affirm
   "mdb", //mongo
+  "ddog",
+  "net", //cloudflare
+  "amex",
+  "visa",
 ];
 
 export type Stock = {

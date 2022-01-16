@@ -6,5 +6,6 @@ export const getOverview = async (symbol: string) => {
     const raw = await alpha.fundamental.company_overview(symbol);
     // trim description to save storage
     delete raw["Description"];
+    return raw;
   });
 };
