@@ -84,6 +84,19 @@ function App() {
 }
 
 const OverviewPage: FC<{ data: Stock[] }> = ({ data }) => {
+  const [sortVar, setSortVar] = useState<string | null>(null);
+  const [sortAsc, setSortAsc] = useState(false);
+
+  const sortedData = useMemo(() => {
+    if (!sortVar) {
+      return data;
+    }
+    return data.sort((a, b) =>
+      sortAsc
+        ? a.overview[sortVar] - b.overview[sortVar]
+        : b.overview[sortVar] - a.overview[sortVar]
+    );
+  }, [sortVar, data, sortAsc]);
   if (!data[0]) {
     return <div>No results found.</div>;
   }
@@ -111,7 +124,17 @@ const OverviewPage: FC<{ data: Stock[] }> = ({ data }) => {
             }}
             key={`legend-overview-${i}`}
           >
-            <button>{key}</button>
+            <button
+              onClick={() => {
+                if (sortVar != key) {
+                  setSortVar(key);
+                } else {
+                  setSortAsc(!sortAsc);
+                }
+              }}
+            >
+              {key}
+            </button>
           </div>
         ))}
       </div>
