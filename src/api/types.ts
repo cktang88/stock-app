@@ -15,5 +15,5 @@ export type StockTxnRecord = {
   moneyDelta: number;
   numSharesDelta: number;
   symbol: string;
-  unixTs: number;
+  unixTsSecs: number;
 };

@@ -6,35 +6,11 @@ import { getCashFlow } from "./cashflow";
 import { getOverview } from "./overview";
 import { getPriceAtDay } from "./priceAtTime";
 import { Stock, StockTxnRecord } from "./types";
+import { SYMBOLS } from "../symbols";
 
 export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
 });
-
-const SYMBOLS = [
-  "ibm",
-  "snow",
-  "aapl",
-  "crm", // salesforce
-  "afrm", // affirm
-  "mdb", //mongo
-  "ddog",
-  "net", //cloudflare
-  "axp", //amex
-  "v", //visa
-  "pypl", //paypal
-  "coin", //coinbase
-  "crwd", //crowdstrike
-  "zm", //zoom
-  "now", //servicenow
-  "okta",
-  "bill", //bill.com
-  "u", //unity
-  "rblx", //roblox
-  "msft",
-  "googl",
-  "fb",
-];
 
 export const fetchData: () => Promise<Stock[]> = async () => {
   let res = Promise.all(
@@ -72,7 +48,7 @@ export const buy = async (
   return {
     numSharesDelta: numShares,
     moneyDelta: numShares * price,
-    unixTs: date.getTime(),
+    unixTsSecs: date.getTime() / 100,
     symbol,
   };
 };
@@ -88,7 +64,7 @@ export const sell = async (
   return {
     numSharesDelta: numShares,
     moneyDelta: numShares * price,
-    unixTs: date.getTime(),
+    unixTsSecs: date.getTime() / 1000,
     symbol,
   };
 };

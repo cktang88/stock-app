@@ -9,6 +9,7 @@ import {
   COL_WIDTH,
   OverviewDisplay,
 } from "./components/OverviewDisplay";
+import { PortfolioDisplay } from "./components/PortfolioDisplay";
 
 enum Tabs {
   INCOME,

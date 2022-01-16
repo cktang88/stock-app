@@ -13,7 +13,8 @@ export function prettifyVal(
     if (Number.isNaN(n)) {
       throw Error("Not a number");
     }
-    if (onlyFormatLarge && Math.abs(n) < 1_000_000) {
+    // 10k is a good boundary that separates revenue-scale figures from stock prices/ratios
+    if (onlyFormatLarge && Math.abs(n) < 10_000) {
       throw Error("Too small to format");
     }
     const pos = n == 0 ? Positive.NONE : n > 0 ? Positive.TRUE : Positive.FALSE;

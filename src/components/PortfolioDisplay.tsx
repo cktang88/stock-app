@@ -1,13 +1,13 @@
 import localforage from "localforage";
 import { FC, useEffect, useState } from "react";
 import { StockTxnRecord } from "../api";
+import { getMonthlyAdjustedPrices } from "../api/prices";
+import { SYMBOLS } from "../symbols";
 import Chart from "./chart";
 
 export const PortfolioDisplay: FC<{ portfolioName: string }> = ({
   portfolioName,
 }) => {
-  const PORTFOLIO_CACHE_KEY = "PORTFOLIO_CACHE_" + portfolioName;
-
   const opts = {
     title: "Portfolio",
     width: 1200,
@@ -22,15 +22,8 @@ export const PortfolioDisplay: FC<{ portfolioName: string }> = ({
 
   const [data, setData] = useState([[], []]);
   useEffect(() => {
-    const loadData = async () => {
-      const portfolio: StockTxnRecord[] = await localforage.getItem(
-        PORTFOLIO_CACHE_KEY
-      );
-      // TODO: generate timeseries data based on price history...
-    };
-    loadData();
-    // load from localforage
-    console.log("foo");
+    loadData(portfolioName);
+    console.log("done.");
   }, []);
 
   return (
@@ -41,4 +34,31 @@ export const PortfolioDisplay: FC<{ portfolioName: string }> = ({
       <Chart options={opts} data={data} />
     </div>
   );
+};
+
+const loadData = async (portfolioName: string) => {
+  const PORTFOLIO_CACHE_KEY = "PORTFOLIO_CACHE_" + portfolioName;
+
+  const portfolio: StockTxnRecord[] = await localforage.getItem(
+    PORTFOLIO_CACHE_KEY
+  );
+  // sort ascending
+  portfolio.sort((a, b) => a.unixTsSecs - b.unixTsSecs);
+
+  let priceHistory: Record<string, Object> = {};
+  await Promise.all(
+    SYMBOLS.map(async (symbol) => {
+      let raw_prices = await getMonthlyAdjustedPrices(symbol);
+      let prices = raw_prices["Monthly Adjusted Time Series"];
+      priceHistory[symbol] = prices;
+    })
+  );
+
+  // TODO: generate timeseries data based on price history...
+  const times = [];
+  const values = [];
+  const nowTsSecs = new Date().getTime() / 1000;
+  for (let i = 0; i < nowTsSecs; i++) {
+    console.log(i);
+  }
 };
