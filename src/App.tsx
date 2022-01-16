@@ -91,15 +91,18 @@ const OverviewPage: FC<{ data: Stock[] }> = ({ data }) => {
     if (!sortVar) {
       return data;
     }
+    // strings and numbers sort differently in JS rip
+    if (Number.isNaN(Number(data[0].overview[sortVar]))) {
+      return sortAsc
+        ? data.sort((a, b) => a.overview[sortVar] < b.overview[sortVar])
+        : data.sort((a, b) => a.overview[sortVar] > b.overview[sortVar]);
+    }
     return data.sort((a, b) =>
       sortAsc
-        ? a.overview[sortVar] - b.overview[sortVar]
-        : b.overview[sortVar] - a.overview[sortVar]
+        ? b.overview[sortVar] - a.overview[sortVar]
+        : a.overview[sortVar] - b.overview[sortVar]
     );
   }, [sortVar, data, sortAsc]);
-  if (!data[0]) {
-    return <div>No results found.</div>;
-  }
   return (
     <div
       style={{
@@ -114,7 +117,7 @@ const OverviewPage: FC<{ data: Stock[] }> = ({ data }) => {
       <div
         style={{ display: "flex", flexDirection: "row", paddingBottom: "24px" }}
       >
-        {Object.keys(cleanKeys(data[0]?.overview)).map((key, i) => (
+        {Object.keys(cleanKeys(sortedData[0]?.overview)).map((key, i) => (
           <div
             style={{
               textAlign: "right",
@@ -138,7 +141,7 @@ const OverviewPage: FC<{ data: Stock[] }> = ({ data }) => {
           </div>
         ))}
       </div>
-      {data?.map((d) => (
+      {sortedData?.map((d) => (
         <OverviewDisplay key={`${d.symbol}-overview`} stock={d} />
       ))}
     </div>
