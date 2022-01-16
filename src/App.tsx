@@ -28,11 +28,12 @@ function App() {
 
   const data = useMemo(() => {
     const term = search.toLowerCase();
-    return fullData.filter(
+    const res = fullData.filter(
       (e) =>
-        e.symbol.toLocaleLowerCase().includes(term) ||
+        e.symbol.toLowerCase().includes(term) ||
         (e.overview?.Name && e.overview.Name.toLowerCase().includes(term))
     );
+    return res;
   }, [fullData, search]);
 
   return (
@@ -48,7 +49,7 @@ function App() {
       {tab == Tabs.INCOME && (
         <div>
           {data?.map((d) => (
-            <BalanceDisplay key={d.id} stock={d} />
+            <BalanceDisplay key={`${d.symbol}-balance`} stock={d} />
           ))}
         </div>
       )}
@@ -62,7 +63,7 @@ function App() {
           }}
         >
           {data?.map((d) => (
-            <PriceDisplay key={d.id} stock={d} />
+            <PriceDisplay key={`${d.symbol}-price`} stock={d} />
           ))}
         </div>
       )}
@@ -77,7 +78,7 @@ function App() {
         >
           {data?.map((d) => (
             <div style={{ margin: "24px" }}>
-              <OverviewDisplay key={d.id} stock={d} />
+              <OverviewDisplay key={`${d.symbol}-overview`} stock={d} />
             </div>
           ))}
         </div>
@@ -85,7 +86,7 @@ function App() {
       {tab == Tabs.CASHFLOW && (
         <div>
           {data?.map((d) => (
-            <CashflowDisplay key={d.id} stock={d} />
+            <CashflowDisplay key={`${d.symbol}-cashflow`} stock={d} />
           ))}
         </div>
       )}

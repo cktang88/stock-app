@@ -6,7 +6,7 @@ import { getCashFlow } from "./cashflow";
 import { getOverview } from "./overview";
 
 export const alpha = alphavantage({
-  key: import.meta.env.VITE_ALPHAVANTAGE_KEY2,
+  key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
 });
 
 const SYMBOLS = [
