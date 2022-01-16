@@ -11,7 +11,9 @@ export type Stock = {
   overview: StringObj;
 };
 
-export type StockTxnResult = {
-  numSharesDelta: number;
+export type StockTxnRecord = {
   moneyDelta: number;
+  numSharesDelta: number;
+  symbol: string;
+  unixTs: number;
 };

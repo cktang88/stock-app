@@ -5,7 +5,7 @@ import { getMonthlyAdjustedPrices } from "./prices";
 import { getCashFlow } from "./cashflow";
 import { getOverview } from "./overview";
 import { getPriceAtDay } from "./priceAtTime";
-import { Stock, StockTxnResult } from "./types";
+import { Stock, StockTxnRecord } from "./types";
 
 export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
@@ -65,13 +65,15 @@ export const buy = async (
   symbol: string,
   spend: number,
   date: Date
-): Promise<StockTxnResult> => {
+): Promise<StockTxnRecord> => {
   // NOTE: months are 0-indexed
   const price: number = (await getPriceAtDay(symbol, date))["fclose"];
   const numShares = Math.floor(spend / price);
   return {
     numSharesDelta: numShares,
     moneyDelta: numShares * price,
+    unixTs: date.getTime(),
+    symbol,
   };
 };
 
@@ -79,13 +81,15 @@ export const sell = async (
   symbol: string,
   dollarValue: number,
   date: Date
-): Promise<StockTxnResult> => {
+): Promise<StockTxnRecord> => {
   // NOTE: months are 0-indexed
   const price: number = (await getPriceAtDay(symbol, date))["fclose"];
   const numShares = Math.floor(dollarValue / price);
   return {
     numSharesDelta: numShares,
     moneyDelta: numShares * price,
+    unixTs: date.getTime(),
+    symbol,
   };
 };
 

@@ -1,8 +1,13 @@
-import { useMemo } from "react";
-import { Stock } from "../api";
+import localforage from "localforage";
+import { FC, useEffect, useState } from "react";
+import { StockTxnRecord } from "../api";
 import Chart from "./chart";
 
-export function PortfolioDisplay(data: [number[], number[]]) {
+export const PortfolioDisplay: FC<{ portfolioName: string }> = ({
+  portfolioName,
+}) => {
+  const PORTFOLIO_CACHE_KEY = "PORTFOLIO_CACHE_" + portfolioName;
+
   const opts = {
     title: "Portfolio",
     width: 1200,
@@ -14,22 +19,19 @@ export function PortfolioDisplay(data: [number[], number[]]) {
       },
     ],
   };
-  if (!stock.prices) {
-    return <></>;
-  }
-  const data = useMemo(() => {
-    return [
-      Object.keys(stock.prices)
-        .filter((k) => k > "2016")
-        .map((k) => new Date(k).getTime() / 1000)
-        .reverse(),
-      Object.entries(stock.prices)
-        .filter(([k, v]) => k > "2016")
-        .map(([k, v]) => Number(v["5. adjusted close"]))
-        // .map((v) => Number(v["4. close"]))
-        .reverse(),
-    ];
-  }, [stock]);
+
+  const [data, setData] = useState([[], []]);
+  useEffect(() => {
+    const loadData = async () => {
+      const portfolio: StockTxnRecord[] = await localforage.getItem(
+        PORTFOLIO_CACHE_KEY
+      );
+      // TODO: generate timeseries data based on price history...
+    };
+    loadData();
+    // load from localforage
+    console.log("foo");
+  }, []);
 
   return (
     <div style={{ paddingTop: "24px" }}>
@@ -39,4 +41,4 @@ export function PortfolioDisplay(data: [number[], number[]]) {
       <Chart options={opts} data={data} />
     </div>
   );
-}
+};
