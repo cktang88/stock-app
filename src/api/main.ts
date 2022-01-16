@@ -8,6 +8,15 @@ export const alpha = alphavantage({
   key: import.meta.env.VITE_ALPHAVANTAGE_KEY,
 });
 
+const SYMBOLS = [
+  "ibm",
+  "snow",
+  "aapl",
+  "crm", // salesforce
+  "afrm", // affirm
+  "mdb", //mongo
+];
+
 export type Stock = {
   symbol: string;
   incomeAnnual: Object[];
@@ -18,9 +27,8 @@ export type Stock = {
 };
 
 export const fetchData: () => Promise<Stock[]> = () => {
-  const stocks = ["ibm", "snow", "aapl"];
   let res = Promise.all(
-    stocks.map(async (symbol) => {
+    SYMBOLS.map(async (symbol) => {
       let bal = await getIncomeStatement(symbol);
       let raw_prices = await getWeeklyAdjustedPrices(symbol);
       let raw_cash = await getCashFlow(symbol);

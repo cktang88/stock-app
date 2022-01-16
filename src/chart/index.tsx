@@ -7,7 +7,12 @@ function Chart(props) {
 
   useEffect(() => {
     new uPlot(props.options, props.data, plotRef.current);
-  }, [props]);
+    return () => {
+      if (plotRef) {
+        plotRef.current = null;
+      }
+    };
+  }, [props, plotRef]);
   return (
     <div>
       <div ref={plotRef}></div>

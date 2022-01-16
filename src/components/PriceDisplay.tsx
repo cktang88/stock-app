@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Stock } from "../api/main";
 import Chart from "../chart";
 
@@ -13,17 +14,19 @@ export function PriceDisplay({ stock }: { stock: Stock }) {
       },
     ],
   };
-  const data = [
-    Object.keys(stock.prices)
-      .filter((k) => k > "2016")
-      .map((k) => new Date(k).getTime() / 1000)
-      .reverse(),
-    Object.entries(stock.prices)
-      .filter(([k, v]) => k > "2016")
-      .map(([k, v]) => Number(v["5. adjusted close"]))
-      // .map((v) => Number(v["4. close"]))
-      .reverse(),
-  ];
+  const data = useMemo(() => {
+    return [
+      Object.keys(stock.prices)
+        .filter((k) => k > "2016")
+        .map((k) => new Date(k).getTime() / 1000)
+        .reverse(),
+      Object.entries(stock.prices)
+        .filter(([k, v]) => k > "2016")
+        .map(([k, v]) => Number(v["5. adjusted close"]))
+        // .map((v) => Number(v["4. close"]))
+        .reverse(),
+    ];
+  }, [stock]);
   console.log(data);
 
   return (
