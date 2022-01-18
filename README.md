@@ -1,5 +1,16 @@
 ## stock-app
 
+Stock portfolio app focusing on fundamental analysis and business financials.
+
+Features:
+- cash flow
+- income statement
+- long-term price history
+- portfolio simulator
+- tables and graphs that enable comparing multiple stocks at once and sorting/filtering/etc.
+
+## About
+
 - created using Vite + React + TS starter
 
 - uses [AlphaVantage](https://www.alphavantage.co/documentation/)
